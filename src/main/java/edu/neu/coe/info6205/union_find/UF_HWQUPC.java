@@ -20,7 +20,9 @@ public class UF_HWQUPC implements UF {
      * @param q the integer representing the other site
      */
     public void connect(int p, int q) {
-        if (!isConnected(p, q)) union(p, q);
+        if (!isConnected(p, q)){
+            union(p, q);
+        }
     }
 
     /**
@@ -82,6 +84,13 @@ public class UF_HWQUPC implements UF {
         validate(p);
         int root = p;
         // FIXME
+        while (root!= parent[root]){
+            if(this.pathCompression){
+                doPathCompression(root);
+
+            }
+            root =parent[root];
+        }
         // END 
         return root;
     }
@@ -170,6 +179,16 @@ public class UF_HWQUPC implements UF {
 
     private void mergeComponents(int i, int j) {
         // FIXME make shorter root point to taller one
+        int height1 = height[i];
+        int height2 = height[j];
+        if(height1 < height2){
+            updateHeight(j, i);
+            updateParent(i ,j);
+        }
+        else{
+            updateHeight(i, j);
+            updateParent(j ,i);
+        }
         // END 
     }
 
@@ -178,6 +197,7 @@ public class UF_HWQUPC implements UF {
      */
     private void doPathCompression(int i) {
         // FIXME update parent to value of grandparent
-        // END 
+        parent[i] = parent[parent[i]];
+    // END
     }
 }
